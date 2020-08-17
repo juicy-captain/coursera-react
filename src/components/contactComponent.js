@@ -3,12 +3,12 @@ import {
     Breadcrumb,
     BreadcrumbItem,
     Button,
+    Label,
     Row,
     Col,
-    Label,
 } from "reactstrap";
-import { Control, Form, Errors, actions } from "react-redux-form";
 import { Link } from "react-router-dom";
+import { Control, Form, Errors } from "react-redux-form";
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !val || val.length <= len;
@@ -18,17 +18,10 @@ const validEmail = (val) =>
     /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 
 class Contact extends Component {
-    constructor(props) {
-        super(props);
-
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    handleSubmit(event) {
-        console.log("Current State is: " + JSON.stringify(this.state));
-        alert("Current State is: " + JSON.stringify(this.state));
+    handleSubmit = (values) => {
+        this.props.postFeedback(values);
         this.props.resetFeedbackForm();
-    }
+    };
 
     render() {
         return (
@@ -42,9 +35,9 @@ class Contact extends Component {
                     </Breadcrumb>
                     <div className="col-12">
                         <h3>Contact Us</h3>
-                        <hr />
                     </div>
                 </div>
+
                 <div className="row row-content">
                     <div className="col-12">
                         <h3>Location Information</h3>
@@ -80,7 +73,7 @@ class Contact extends Component {
                             >
                                 <i className="fa fa-phone"></i> Call
                             </a>
-                            <a role="button" className="btn btn-info">
+                            <a role="button" className="btn btn-info" href="/">
                                 <i className="fa fa-skype"></i> Skype
                             </a>
                             <a
@@ -95,7 +88,7 @@ class Contact extends Component {
                 </div>
                 <div className="row row-content">
                     <div className="col-12">
-                        <h3>Send us your Feedback</h3>
+                        <h3>Send us Your Feedback</h3>
                     </div>
                     <div className="col-12 col-md-9">
                         <Form
@@ -124,7 +117,7 @@ class Contact extends Component {
                                         model=".firstname"
                                         show="touched"
                                         messages={{
-                                            required: "Required",
+                                            required: "Required  ",
                                             minLength:
                                                 "Must be greater than 2 characters",
                                             maxLength:
@@ -139,59 +132,60 @@ class Contact extends Component {
                                 </Label>
                                 <Col md={10}>
                                     <Control.text
-                                        model=".lastname"
                                         id="lastname"
                                         name="lastname"
-                                        placeholder="Last Name"
+                                        model=".lastname"
                                         className="form-control"
                                         validators={{
                                             required,
                                             minLength: minLength(3),
                                             maxLength: maxLength(15),
                                         }}
+                                        placeholder="Last Name"
                                     />
+
                                     <Errors
                                         className="text-danger"
                                         model=".lastname"
                                         show="touched"
                                         messages={{
-                                            required: "Required",
+                                            required: "*Required ",
                                             minLength:
-                                                "Must be greater than 2 characters",
+                                                "*Must be greater than 2 characters ",
                                             maxLength:
-                                                "Must be 15 characters or less",
+                                                "*Must be 15 characters or less ",
                                         }}
                                     />
                                 </Col>
                             </Row>
                             <Row className="form-group">
                                 <Label htmlFor="telnum" md={2}>
-                                    Contact Tel.
+                                    Telephone Number
                                 </Label>
                                 <Col md={10}>
                                     <Control.text
-                                        model=".telnum"
                                         id="telnum"
                                         name="telnum"
-                                        placeholder="Tel. Number"
+                                        model=".telnum"
                                         className="form-control"
                                         validators={{
                                             required,
-                                            minLength: minLength(3),
-                                            maxLength: maxLength(15),
+                                            minLength: minLength(7),
+                                            maxLength: maxLength(10),
                                             isNumber,
                                         }}
+                                        placeholder="Telephone Number"
                                     />
                                     <Errors
                                         className="text-danger"
                                         model=".telnum"
                                         show="touched"
                                         messages={{
-                                            required: "Required",
+                                            required: "Required ",
                                             minLength:
-                                                "Must be greater than 2 numbers",
+                                                "Mush be greater than 7 numberss",
                                             maxLength:
-                                                "Must be 15 numbers or less",
+                                                "Must be 10 numberss or less",
                                             isNumber: "Must be a number",
                                         }}
                                     />
@@ -203,23 +197,24 @@ class Contact extends Component {
                                 </Label>
                                 <Col md={10}>
                                     <Control.text
-                                        model=".email"
                                         id="email"
                                         name="email"
-                                        placeholder="Email"
+                                        model=".email"
                                         className="form-control"
                                         validators={{
                                             required,
                                             validEmail,
                                         }}
+                                        placeholder="Email"
                                     />
+
                                     <Errors
                                         className="text-danger"
                                         model=".email"
                                         show="touched"
                                         messages={{
-                                            required: "Required",
-                                            validEmail: "Invalid Email Address",
+                                            required: "Required ",
+                                            validEmail: "Invalid email address",
                                         }}
                                     />
                                 </Col>
@@ -229,8 +224,9 @@ class Contact extends Component {
                                     <div className="form-check">
                                         <Label check>
                                             <Control.checkbox
-                                                model=".agree"
+                                                id="agree"
                                                 name="agree"
+                                                model=".agree"
                                                 className="form-check-input"
                                             />
                                             <strong>May we contact you?</strong>
@@ -239,8 +235,9 @@ class Contact extends Component {
                                 </Col>
                                 <Col md={{ size: 3, offset: 1 }}>
                                     <Control.select
-                                        model=".contactType"
+                                        id="contactType"
                                         name="contactType"
+                                        model=".contactType"
                                         className="form-control"
                                     >
                                         <option>Tel.</option>
@@ -255,10 +252,10 @@ class Contact extends Component {
                                 <Col md={10}>
                                     <Control.textarea
                                         model=".message"
+                                        className="form-control"
                                         id="message"
                                         name="message"
                                         rows="12"
-                                        className="form-control"
                                     />
                                 </Col>
                             </Row>
